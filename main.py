@@ -5,6 +5,8 @@
 ##############################################################################
 
 import sys
+from stock_page    import StockPage
+from catalogs_page import CatalogsPage
 from PyQt5.QtCore    import Qt
 from PyQt5.QtGui     import QFont, QCursor
 from PyQt5.QtWidgets import (
@@ -38,7 +40,6 @@ MENU_ITEMS = [
     ("🗺️  Маршруты",          "routes"),
     ("🗓️  Планирование",      "planning"),
     ("💰  Зарплата",          "payroll"),
-    ("🏷️  Маркировка",        "marking"),
     ("🌐  ГИИС ДМДК",         "giis"),
     ("📚  Справочники",       "catalogs"),
 ]
@@ -122,7 +123,8 @@ class Main(QMainWindow):
             self.menu.addItem(title)
             if key=="orders":   page=OrdersPage()
             elif key=="wax":    page=WaxPage()
-            elif key=="catalogs": page=StubPage("Справочники …")
+            elif key=="stock":    page = StockPage()
+            elif key=="catalogs": page = CatalogsPage()
             else:               page=StubPage(title.strip())
             self.pages.addWidget(page)
         self.menu.currentRowChanged.connect(self.pages.setCurrentIndex)
