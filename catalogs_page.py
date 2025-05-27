@@ -38,25 +38,31 @@ class CatalogsPage(QWidget):
     # ───────── заполнение ─────────
     def _fill(self):
         self.tree.clear()
+
+        # корневые узлы
         roots = {}
-        for cat in ["organizations","contragents","cities","warehouses"]:
-            roots[cat] = QTreeWidgetItem(self.tree,[cat.capitalize()])
-        art_root = QTreeWidgetItem(self.tree,["articles"])
+        for cat in ["organizations", "contragents", "cities", "warehouses"]:
+            roots[cat] = QTreeWidgetItem(self.tree, [cat.capitalize()])
+
+        art_root = QTreeWidgetItem(self.tree, ["articles"])
         roots["articles"] = art_root
 
-        # статичные
-        for cat,lst in cat_get("organizations"),cat_get("contragents"),cat_get("cities"),cat_get("warehouses"):
-            pass  # заглушка для type hints
-        for cat in roots:
+        # значения из JSON-справочников
+        for cat in ["organizations", "contragents", "cities", "warehouses"]:
             for val in cat_get(cat):
-                QTreeWidgetItem(roots[cat],[val])
+                QTreeWidgetItem(roots[cat], [val])
 
         # номенклатура из catalogs.py
         for art, card in NOMENCLATURE.items():
-            leaf = QTreeWidgetItem(art_root,[f"{art} — {card['name']}"])
-            leaf.setToolTip(0,f"Вес: {card['w']} г   Метод: {card['method']}")
+            leaf = QTreeWidgetItem(art_root,
+                                   [f"{art} — {card['name']}"])
+            leaf.setToolTip(
+                0, f"Вес: {card['w']} г   Метод: {card['method']}"
+            )
 
-        for r in roots.values(): r.setExpanded(True)
+        # раскрываем дерево
+        for node in roots.values():
+            node.setExpanded(True)
 
     # ───────── фильтр ─────────
     def _filter(self, text: str):
